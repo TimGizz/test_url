@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Routing Example</title>
+</head>
+<body>
+  <nav>
+    <a href="/" id="home-link">Home</a>
+    <a href="/users/1" id="user1-link">User 1</a>
+    <a href="/users/2" id="user2-link">User 2</a>
+  </nav>
+
+  <main id="content">
+    <!-- Динамический контент -->
+    <h1>Welcome to the website</h1>
+  </main>
+
+  <script>
+    // Обработка маршрутов
+const routes = {
+  '/': 'Welcome to the homepage!',
+  '/users/1': 'User 1: Alice',
+  '/users/2': 'User 2: Bob',
+};
+
+// Функция для отображения контента
+function navigateTo(url) {
+  const content = document.getElementById('content');
+  content.innerHTML = `<h1>${routes[url] || '404: Page not found'}</h1>`;
+}
+
+// Перехват ссылок
+document.addEventListener('click', (e) => {
+  if (e.target.tagName === 'A') {
+    e.preventDefault();
+    const url = e.target.getAttribute('href');
+
+    // Обновляем URL без перезагрузки
+    window.history.pushState({}, '', url);
+    navigateTo(url);
+  }
+});
+
+// Обработка события изменения истории (например, кнопки "Назад" или "Вперед")
+window.addEventListener('popstate', () => {
+  navigateTo(window.location.pathname);
+});
+
+// Отображение контента при первой загрузке
+navigateTo(window.location.pathname);
+
+  </script>
+</body>
+</html>
